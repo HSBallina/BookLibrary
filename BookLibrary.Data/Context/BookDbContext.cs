@@ -5,14 +5,22 @@ namespace BookLibrary.Data.Context;
 
 internal class BookDbContext : DbContext
 {
-  public DbSet<Book>? Cds { get; set; }
+  public DbSet<Book>? Books { get; set; }
   public DbSet<Genre>? Genres { get; set; }
+  public DbSet<Author>? Authors { get; set; }
 
   public BookDbContext(DbContextOptions<BookDbContext> options)
     : base(options) { }
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
+    modelBuilder.Entity<Author>(b =>
+    {
+      b.HasKey(c => c.Id);
+      b.Property(c => c.Name).HasColumnType("nvarchar(100)").IsRequired();
+      b.HasMany((c => c.Books));
+    });
+
     modelBuilder.Entity<Genre>(b =>
     {
       b.HasKey(c => c.Id);
@@ -30,6 +38,10 @@ internal class BookDbContext : DbContext
       b.HasOne(c => c.Genre)
         .WithMany(c => c.Books)
         .HasForeignKey(c => c.GenreId)
+        .OnDelete(DeleteBehavior.ClientSetNull);
+      b.HasOne(c => c.Author)
+        .WithMany(c => c.Books)
+        .HasForeignKey(c => c.AuthorId)
         .IsRequired()
         .OnDelete(DeleteBehavior.Restrict);
     });
