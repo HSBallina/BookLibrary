@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BookLibrary.Data.Context;
 
-internal class BookDbContext : DbContext
+public class BookDbContext : DbContext
 {
   public DbSet<Book>? Books { get; set; }
   public DbSet<Genre>? Genres { get; set; }
@@ -11,6 +11,14 @@ internal class BookDbContext : DbContext
 
   public BookDbContext(DbContextOptions<BookDbContext> options)
     : base(options) { }
+
+  protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+  {
+    if (!optionsBuilder.IsConfigured)
+    {
+      optionsBuilder.UseSqlServer("--- from cmd / build ---");
+    }
+  }
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
@@ -32,7 +40,6 @@ internal class BookDbContext : DbContext
     {
       b.HasKey(c => c.Id);
       b.Property(c => c.Name).HasColumnType("nvarchar(100)").IsRequired();
-      b.Property(c => c.Author).HasColumnType("nvarchar(100)").IsRequired();
       b.Property(c => c.Description).HasColumnType("nvarchar(100)");
       b.Property(c => c.Purchased).HasColumnType("datetime");
       b.HasOne(c => c.Genre)
