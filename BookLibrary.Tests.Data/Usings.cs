@@ -1,0 +1,11 @@
+global using AutoMapper;
+global using Bogus;
+global using BookLibrary.Common;
+global using BookLibrary.Common.Dtos;
+global using BookLibrary.Data.Context;
+global using BookLibrary.Data.Models;
+global using BookLibrary.Data.Profiles;
+global using BookLibrary.Data.Repositories;
+global using BookLibrary.Tests.Data.Assist;
+global using Microsoft.EntityFrameworkCore;
+global using NUnit.Framework;
