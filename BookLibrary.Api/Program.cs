@@ -1,3 +1,5 @@
+using BookLibrary.Data.Context;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,8 +11,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddControllers()
   .AddJsonOptions(o => o.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull);
 
-//builder.Services.AddDbContext<CdContext>(opt
-//  => opt.UseSqlServer(builder.Configuration.GetConnectionString("CdLibrary")));
+builder.Services.AddDbContext<BookDbContext>(opt
+  => opt.UseSqlServer(builder.Configuration.GetConnectionString("BookLibrary")));
 
 var app = builder.Build();
 
