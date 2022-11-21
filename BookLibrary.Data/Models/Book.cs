@@ -6,8 +6,8 @@ public class Book
   public string Name { get; set; } = string.Empty;
   public string Description { get; set; } = string.Empty;
   public DateTime? Purchased { get; set; } = null;
-  public Guid GenreId { get; set; }
-  public Genre? Genre { get; set; }
+  public Guid? GenreId { get; set; }
+  public virtual Genre? Genre { get; set; }
   public Guid AuthorId { get; set; }
-  public Author? Author { get; set; }
+  public virtual Author? Author { get; set; }
 }

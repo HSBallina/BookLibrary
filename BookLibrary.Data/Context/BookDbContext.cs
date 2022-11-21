@@ -42,6 +42,7 @@ public class BookDbContext : DbContext
       b.Property(c => c.Name).HasColumnType("nvarchar(100)").IsRequired();
       b.Property(c => c.Description).HasColumnType("nvarchar(100)");
       b.Property(c => c.Purchased).HasColumnType("datetime");
+      b.Property(c => c.GenreId).IsRequired(false);
       b.HasOne(c => c.Genre)
         .WithMany(c => c.Books)
         .HasForeignKey(c => c.GenreId)
