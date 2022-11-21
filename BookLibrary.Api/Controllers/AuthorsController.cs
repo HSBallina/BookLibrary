@@ -21,4 +21,20 @@ public class AuthorsController : ControllerBase
 
     return Ok(model);
   }
+
+  [HttpGet("{id:guid}")]
+  public async Task<IActionResult> GetById(Guid id)
+  {
+    var model = await _authorRepository.GetById(id);
+
+    return model != null ? Ok(model) : NotFound();
+  }
+
+  [HttpGet("find/{searchString}")]
+  public async Task<IActionResult> Find(string searchString)
+  {
+    var model = await _authorRepository.GetByName(searchString);
+
+    return Ok(model);
+  }
 }

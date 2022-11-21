@@ -18,11 +18,33 @@ public class AuthorRepository : IAuthorRepository
 
   public async Task<IEnumerable<AuthorDto>> List()
   {
-    if (_context.Authors == null) return new List<AuthorDto>();
+    if (_context.Authors == null) throw new ApplicationException("Can't reach the database");
 
     return await _context.Authors
       .OrderBy(c => c.Name)
       .Select(c => _mapper.Map<AuthorDto>(c))
       .ToListAsync();
+  }
+
+  public async Task<AuthorDto?> GetById(Guid id)
+  {
+    if (_context.Authors == null) throw new ApplicationException("Can't reach the database");
+
+    var author = await _context.Authors.FindAsync(id);
+
+    return author == null
+      ? null
+      : _mapper.Map<AuthorDto>(await _context.Authors.FindAsync(id));
+  }
+
+  public async Task<IEnumerable<AuthorDto>> GetByName(string name)
+  {
+    if (_context.Authors == null) throw new ApplicationException("Can't reach the database");
+
+    return await _context.Authors
+        .Where(c => c.Name.Contains(name))
+        .OrderBy(c => c.Name)
+        .Select(c => _mapper.Map<AuthorDto>(c))
+        .ToListAsync();
   }
 }
