@@ -4,6 +4,6 @@ namespace BookLibrary.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class Authors : ControllerBase
+public class AuthorsController : ControllerBase
 {
 }
