@@ -12,5 +12,7 @@ public class AuthorProfile : Profile
 
     CreateMap<AuthorDto, Author>()
       .ForMember(d => d.Books, o => o.Ignore());
+
+    CreateMap<Author, AuthorDetailDto>();
   }
 }

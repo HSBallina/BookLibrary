@@ -26,15 +26,18 @@ public class AuthorRepository : IAuthorRepository
       .ToListAsync();
   }
 
-  public async Task<AuthorDto?> GetById(Guid id)
+  public async Task<AuthorDetailDto?> GetById(Guid id)
   {
     if (_context.Authors == null) throw new ApplicationException("Can't reach the database");
 
-    var author = await _context.Authors.FindAsync(id);
+    var author = await _context.Authors
+      .Include(e => e.Books)
+      .Where(c => c.Id == id)
+      .FirstOrDefaultAsync();
 
     return author == null
       ? null
-      : _mapper.Map<AuthorDto>(await _context.Authors.FindAsync(id));
+      : _mapper.Map<AuthorDetailDto>(author);
   }
 
   public async Task<IEnumerable<AuthorDto>> GetByName(string name)
