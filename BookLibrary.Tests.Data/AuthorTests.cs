@@ -31,7 +31,24 @@ public class AuthorTests
   }
 
   [Test]
-  public async Task GetShouldReturnLocation()
+  public async Task ListShouldReturnAuthors()
+  {
+    _context.Authors!.AddRange(_authors);
+    await _context.SaveChangesAsync();
+
+    var expected = _authors.Select(e => _mapper.Map<AuthorDto>(e)).ToList();
+    var actual = (await _repository.List()).ToList();
+
+    Assert.Multiple(() =>
+    {
+      Assert.That(actual, Is.Not.Null);
+      Assert.That(actual, Is.AssignableFrom<List<AuthorDto>>());
+      Assert.That(actual, Has.Count.EqualTo(expected.Count));
+    });
+  }
+
+  [Test]
+  public async Task GetShouldReturnAuthor()
   {
     _context.Authors!.AddRange(_authors);
     await _context.SaveChangesAsync();
@@ -46,5 +63,16 @@ public class AuthorTests
       Assert.That(actual!.Id, Is.EqualTo(expected.Id));
       Assert.That(actual.Name, Is.EqualTo(expected.Name));
     });
+  }
+
+  [Test]
+  public async Task GetShouldReturnNull()
+  {
+    _context.Authors!.AddRange(_authors.Take(19));
+    await _context.SaveChangesAsync();
+
+    var actual = await _repository.GetById(_authors[19].Id);
+
+    Assert.That(actual, Is.Null);
   }
 }
