@@ -2,9 +2,13 @@ using BookLibrary.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using BookLibrary.Api.Controllers;
+using BookLibrary.Api.Internals;
 using BookLibrary.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<AppOptions>(
+  builder.Configuration.GetSection(AppOptions.Settings));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
