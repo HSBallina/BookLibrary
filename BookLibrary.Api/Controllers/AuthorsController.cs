@@ -1,4 +1,6 @@
-﻿using BookLibrary.Data.Repositories;
+﻿using AutoMapper;
+using BookLibrary.Api.ViewModels;
+using BookLibrary.Data.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookLibrary.Api.Controllers;
@@ -8,16 +10,19 @@ namespace BookLibrary.Api.Controllers;
 public class AuthorsController : ControllerBase
 {
   private readonly IAuthorRepository _authorRepository;
+  private readonly IMapper _mapper;
 
-  public AuthorsController(IAuthorRepository authorRepository)
+  public AuthorsController(IAuthorRepository authorRepository, IMapper mapper)
   {
     _authorRepository = authorRepository;
+    _mapper = mapper;
   }
 
   [HttpGet]
   public async Task<IActionResult> List()
   {
-    var model = await _authorRepository.List();
+    var model = (await _authorRepository.List())
+      .Select(e => _mapper.Map<AuthorViewModel>(e));
 
     return Ok(model);
   }
@@ -25,7 +30,7 @@ public class AuthorsController : ControllerBase
   [HttpGet("{id:guid}")]
   public async Task<IActionResult> GetById(Guid id)
   {
-    var model = await _authorRepository.GetById(id);
+    var model = _mapper.Map<AuthorDetailViewModel>(await _authorRepository.GetById(id));
 
     return model != null ? Ok(model) : NotFound();
   }

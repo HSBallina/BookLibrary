@@ -1,7 +1,7 @@
 using BookLibrary.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
-using BookLibrary.Data.Models;
+using BookLibrary.Api.Controllers;
 using BookLibrary.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,7 +16,8 @@ builder.Services.AddControllers()
 builder.Services.AddDbContext<BookDbContext>(opt
   => opt.UseSqlServer(builder.Configuration.GetConnectionString("BookLibrary")));
 
-builder.Services.AddAutoMapper(typeof(Book).Assembly);
+builder.Services.AddAutoMapper(typeof(AuthorsController).Assembly);
+builder.Services.AddAutoMapper(typeof(AuthorRepository).Assembly);
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 
 
